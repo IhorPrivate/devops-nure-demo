@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-tasks-table
+      author: ihor
+      changes:
+        - createTable:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: completed
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 002-load-seed-tasks
+      author: ihor
+      changes:
+        - loadData:
+            tableName: tasks
+            file: data/tasks.csv
+            relativeToChangelogFile: true
+            separator: ";"
+            encoding: UTF-8
+            columns:
+              - column:
+                  name: id
+                  type: NUMERIC
+              - column:
+                  name: title
+                  type: STRING
+              - column:
+                  name: completed
+                  type: BOOLEAN
+
+  - changeSet:
+      id: 003-sync-tasks-id-sequence
+      author: ihor
+      comment: Seed rows carry explicit ids, so move the identity sequence past them
+      dbms: postgresql
+      changes:
+        - sql:
+            sql: SELECT setval(pg_get_serial_sequence('tasks', 'id'), COALESCE((SELECT MAX(id) FROM tasks), 0) + 1, false)

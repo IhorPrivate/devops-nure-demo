@@ -1,0 +1,36 @@
+# Image setup lives in each service's Dockerfile, environment variables in its own .env file.
+# Host ports come from .env in this folder. This file only wires services together.
+name: demo
+
+services:
+  postgres:
+    build: ./postgres
+    env_file: ./postgres/postgres.env
+    ports:
+      - "${POSTGRES_HOST_PORT}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  pgadmin:
+    build: ./pgadmin
+    env_file: ./pgadmin/pgadmin.env
+    ports:
+      - "${PGADMIN_HOST_PORT}:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  app:
+    build: ./app
+    env_file: ./app/app.env
+    ports:
+      - "${APP_HOST_PORT}:8181"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  pgadmin-data:

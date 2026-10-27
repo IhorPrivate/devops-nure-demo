@@ -1,0 +1,3 @@
+# Only demo.jar is needed for the app image
+*
+!demo.jar

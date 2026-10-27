@@ -1,0 +1,11 @@
+id;title;completed
+1;Set up Git repository;true
+2;Write Dockerfile for the app;true
+3;Configure GitHub Actions pipeline;false
+4;Add unit tests for TaskService;false
+5;Set up docker-compose for local dev;false
+6;Provision Kubernetes cluster;false
+7;Write Helm chart;false
+8;Add Prometheus metrics;false
+9;Configure Grafana dashboard;false
+10;Document deployment process;false
